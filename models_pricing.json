@@ -1,0 +1,56 @@
+{
+  "gpt-5.4": {
+    "input": 2.50,
+    "output": 15.00
+  },
+  "gpt-5": {
+    "input": 5.00,
+    "output": 15.00
+  },
+  "gpt-5-mini": {
+    "input": 0.150,
+    "output": 0.600
+  },
+  "gpt-4o": {
+    "input": 5.00,
+    "output": 15.00
+  },
+  "gpt-4o-mini": {
+    "input": 0.150,
+    "output": 0.600
+  },
+  "gemini-3.1-pro": {
+    "input": 2.00,
+    "output": 7.50
+  },
+  "gemini-3.1-pro-preview": {
+    "input": 2.00,
+    "output": 12.00
+  },
+  "gemini-3.1-flash-lite-preview": {
+    "input": 0.075,
+    "output": 0.300
+  },
+  "gemini-2.5-flash": {
+    "input": 0.30,
+    "output": 2.50
+  },
+  "gemini-2.5-pro": {
+    "input": 1.25,
+    "output": 10.00,
+    "input_high_context": 2.50,
+    "output_high_context": 15.00
+  },
+  "claude-opus-4.7": {
+    "input": 5.00,
+    "output": 25.00
+  },
+  "claude-sonnet-4-6": {
+    "input": 3.00,
+    "output": 15.00
+  },
+  "claude-haiku-4-5": {
+    "input": 1.00,
+    "output": 5.00
+  }
+}

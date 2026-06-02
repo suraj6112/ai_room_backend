@@ -1,0 +1,32 @@
+[
+  {
+    "fileName": "01_Master_Subscription_Agreement_Template.pdf",
+    "columnName": "Term",
+    "status": "WRONG",
+    "expected": null,
+    "actual": "until all Order Forms expire or are terminated",
+    "reasoning": "The document explicitly states the duration of the agreement in section 11, which is clear and unambiguous.",
+    "journey": [
+      "[openai/gpt-4o-mini] Success"
+    ],
+    "searchMetrics": {
+      "strategy": "full_document",
+      "totalPages": 2,
+      "contextChars": 2664
+    }
+  },
+  {
+    "fileName": "01_Master_Subscription_Agreement_Template.pdf",
+    "columnName": "Supplier Name",
+    "status": "WRONG",
+    "expected": "Klaviyo, Inc.",
+    "actual": "Acme Corp",
+    "reasoning": "Derived from document profile analysis.",
+    "journey": [
+      "[ShortCircuit] Answer derived from document profile keyFacts. RAG bypassed."
+    ],
+    "searchMetrics": {
+      "strategy": "short_circuit"
+    }
+  }
+]

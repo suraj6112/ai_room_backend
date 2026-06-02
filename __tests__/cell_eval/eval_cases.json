@@ -1,0 +1,225 @@
+[
+  {
+    "fileName": "01_Master_Subscription_Agreement_Template.pdf",
+    "fileId": "fL9CxXrpOBe3sbR9v3tS",
+    "basePath": "workspaces/0IpDA186hlOikhhgeh8L",
+    "extractedTextCache": "## Page 1\n\n# KLAVIYO — MASTER SUBSCRIPTION AGREEMENT (Form)\n\nStandard customer-facing terms — Edition 2023.01\n\n## 1. DEFINITIONS\n\n\"Klaviyo\" means Klaviyo, Inc., a Delaware corporation, or its applicable affiliate. \"Customer\" means the entity identified in the Order Form. \"Order Form\" means an ordering document executed by the parties referencing this Agreement. \"Service\" means the Klaviyo platform identified in the applicable Order Form, including any software, hosting, and related services. \"Customer Data\" means data submitted to the Service by or on behalf of Customer. \"Documentation\" means the user documentation made generally available by Klaviyo at https://help.klaviyo.com.\n\n## 2. PROVISION OF SERVICE\n\nSubject to this Agreement, Klaviyo will (a) make the Service available pursuant to the applicable Order Form, (b) provide standard support, and (c) use commercially reasonable efforts to make the Service available 24/7, except for: (i) planned downtime; (ii) any unavailability caused by circumstances beyond Klaviyo's reasonable control. The Service Level Agreement is set forth in Exhibit A.\n\n## 3. CUSTOMER OBLIGATIONS\n\nCustomer is responsible for: (a) the accuracy, quality, and legality of Customer Data, the means by which Customer acquired the Customer Data, Customer's use of Customer Data with the Service, and the interoperation of any non-Klaviyo applications with which Customer uses the Service; (b) preventing unauthorized access to or use of the Service; (c) complying with applicable laws (including applicable privacy and consumer-protection laws) in connection with its use of the Service; and (d) maintaining proper consents to send communications via the Service in accordance with CAN-SPAM, TCPA, CASL, GDPR, and similar laws.\n\n## 4. PROHIBITED USES\n\nCustomer shall not (a) use the Service in violation of any applicable law; (b) send unsolicited commercial messages; (c) reverse-engineer the Service except as expressly permitted; (d) interfere with the Service's security or integrity; or (e) re-sell the Service except pursuant to a written reseller agreement with Klaviyo.\n\n## 5. FEES AND PAYMENT\n\nCustomer shall pay all fees specified in the applicable Order Form. Except as expressly provided, fees are non-refundable and based on subscriptions purchased, not actual usage. Late payments accrue interest at 1.5% per month or the maximum permitted by law. All fees are exclusive of taxes; Customer is responsible for all taxes other than those based on Klaviyo's net income.\n\n## 6. PROPRIETARY RIGHTS\n\nKlaviyo and its licensors retain all rights, title, and interest in the Service, including all intellectual property rights. Customer retains all rights to Customer Data. Customer hereby grants Klaviyo a worldwide, non-exclusive, royalty-free license to host, copy, transmit, and display Customer Data solely as necessary to provide the Service. Klaviyo may use aggregated and anonymized usage information for product improvement and\n\n> CONFIDENTIAL — Prepared for use in connection with Project Aurora; do not distribute.\n\n---\n\n## Page 2\n\n# Project Aurora — Strictly Confidential / Subject to NDA\n\nPage 2\n\nbenchmarking.\n\n## 7. CONFIDENTIALITY\n\nEach party shall protect the other’s Confidential Information using the same degree of care it uses to protect its own confidential information of like importance, but in no event less than reasonable care.\n\n## 8. WARRANTIES; DISCLAIMER\n\nKlaviyo warrants that the Service will perform materially in accordance with the Documentation. EXCEPT AS EXPRESSLY SET FORTH HEREIN, KLAVIYO MAKES NO WARRANTIES, EXPRESS OR IMPLIED, AND KLAVIYO SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.\n\n## 9. INDEMNIFICATION\n\nKlaviyo shall defend Customer against any third-party claim that the Service infringes a U.S. patent, copyright, or trademark, and shall pay damages finally awarded against Customer. Customer shall defend Klaviyo against any third-party claim arising from Customer Data or Customer’s use of the Service in violation of this Agreement.\n\n## 10. LIMITATION OF LIABILITY\n\nEXCEPT FOR (i) INDEMNIFICATION OBLIGATIONS, (ii) BREACH OF CONFIDENTIALITY, AND (iii) AMOUNTS DUE UNDER AN ORDER FORM, NEITHER PARTY SHALL BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES, EVEN IF ADVISED OF THE POSSIBILITY. EACH PARTY’S AGGREGATE LIABILITY ARISING FROM THIS AGREEMENT SHALL NOT EXCEED THE FEES PAID OR PAYABLE BY CUSTOMER TO KLAVIYO IN THE TWELVE MONTHS PRECEDING THE EVENT GIVING RISE TO THE CLAIM.\n\n## 11. TERM AND TERMINATION\n\nThis Agreement commences on the Effective Date and continues until all Order Forms expire or are terminated. Either party may terminate for material breach not cured within 30 days of written notice.\n\n## 12. GENERAL\n\nGoverning law: Commonwealth of Massachusetts. Forum: state and federal courts in Suffolk County, Massachusetts. Assignment: neither party may assign without consent (not unreasonably withheld), except in connection with a merger, acquisition, or sale of all or substantially all of its assets.\n\n## EXHIBIT A — SERVICE LEVEL AGREEMENT\n\nKlaviyo will use commercially reasonable efforts to provide a Monthly Uptime Percentage of at least 99.9%, calculated by subtracting from 100% the percentage of minutes during the month in which the Service was Unavailable, excluding scheduled downtime. Service Credits are: 10% of monthly fees for 99.0% – 99.9%; 25% for 95.0% – 99.0%; 50% for less than 95.0%. Service Credits are Customer’s sole and exclusive remedy for any availability-related breach.\n\n> CONFIDENTIAL — Prepared for use in connection with Project Aurora; do not distribute.",
+    "documentProfileSummary": {
+      "status": "failed",
+      "hasProfile": false,
+      "error": "[ProfileBuilder] ANTHROPIC_API_KEY not set",
+      "updatedAt": {
+        "_seconds": 1777868568,
+        "_nanoseconds": 864000000
+      }
+    },
+    "columnName": "Governing Law",
+    "columnType": "text",
+    "columnPrompt": "Which state or country laws govern this contract?",
+    "columnOptions": {},
+    "expected_value": "Commonwealth of Massachusetts",
+    "expected_confidence": "high"
+  },
+  {
+    "fileName": "01_Master_Subscription_Agreement_Template.pdf",
+    "fileId": "fL9CxXrpOBe3sbR9v3tS",
+    "basePath": "workspaces/0IpDA186hlOikhhgeh8L",
+    "extractedTextCache": "## Page 1\n\n# KLAVIYO — MASTER SUBSCRIPTION AGREEMENT (Form)\n\nStandard customer-facing terms — Edition 2023.01\n\n## 1. DEFINITIONS\n\n\"Klaviyo\" means Klaviyo, Inc., a Delaware corporation, or its applicable affiliate. \"Customer\" means the entity identified in the Order Form. \"Order Form\" means an ordering document executed by the parties referencing this Agreement. \"Service\" means the Klaviyo platform identified in the applicable Order Form, including any software, hosting, and related services. \"Customer Data\" means data submitted to the Service by or on behalf of Customer. \"Documentation\" means the user documentation made generally available by Klaviyo at https://help.klaviyo.com.\n\n## 2. PROVISION OF SERVICE\n\nSubject to this Agreement, Klaviyo will (a) make the Service available pursuant to the applicable Order Form, (b) provide standard support, and (c) use commercially reasonable efforts to make the Service available 24/7, except for: (i) planned downtime; (ii) any unavailability caused by circumstances beyond Klaviyo's reasonable control. The Service Level Agreement is set forth in Exhibit A.\n\n## 3. CUSTOMER OBLIGATIONS\n\nCustomer is responsible for: (a) the accuracy, quality, and legality of Customer Data, the means by which Customer acquired the Customer Data, Customer's use of Customer Data with the Service, and the interoperation of any non-Klaviyo applications with which Customer uses the Service; (b) preventing unauthorized access to or use of the Service; (c) complying with applicable laws (including applicable privacy and consumer-protection laws) in connection with its use of the Service; and (d) maintaining proper consents to send communications via the Service in accordance with CAN-SPAM, TCPA, CASL, GDPR, and similar laws.\n\n## 4. PROHIBITED USES\n\nCustomer shall not (a) use the Service in violation of any applicable law; (b) send unsolicited commercial messages; (c) reverse-engineer the Service except as expressly permitted; (d) interfere with the Service's security or integrity; or (e) re-sell the Service except pursuant to a written reseller agreement with Klaviyo.\n\n## 5. FEES AND PAYMENT\n\nCustomer shall pay all fees specified in the applicable Order Form. Except as expressly provided, fees are non-refundable and based on subscriptions purchased, not actual usage. Late payments accrue interest at 1.5% per month or the maximum permitted by law. All fees are exclusive of taxes; Customer is responsible for all taxes other than those based on Klaviyo's net income.\n\n## 6. PROPRIETARY RIGHTS\n\nKlaviyo and its licensors retain all rights, title, and interest in the Service, including all intellectual property rights. Customer retains all rights to Customer Data. Customer hereby grants Klaviyo a worldwide, non-exclusive, royalty-free license to host, copy, transmit, and display Customer Data solely as necessary to provide the Service. Klaviyo may use aggregated and anonymized usage information for product improvement and\n\n> CONFIDENTIAL — Prepared for use in connection with Project Aurora; do not distribute.\n\n---\n\n## Page 2\n\n# Project Aurora — Strictly Confidential / Subject to NDA\n\nPage 2\n\nbenchmarking.\n\n## 7. CONFIDENTIALITY\n\nEach party shall protect the other’s Confidential Information using the same degree of care it uses to protect its own confidential information of like importance, but in no event less than reasonable care.\n\n## 8. WARRANTIES; DISCLAIMER\n\nKlaviyo warrants that the Service will perform materially in accordance with the Documentation. EXCEPT AS EXPRESSLY SET FORTH HEREIN, KLAVIYO MAKES NO WARRANTIES, EXPRESS OR IMPLIED, AND KLAVIYO SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.\n\n## 9. INDEMNIFICATION\n\nKlaviyo shall defend Customer against any third-party claim that the Service infringes a U.S. patent, copyright, or trademark, and shall pay damages finally awarded against Customer. Customer shall defend Klaviyo against any third-party claim arising from Customer Data or Customer’s use of the Service in violation of this Agreement.\n\n## 10. LIMITATION OF LIABILITY\n\nEXCEPT FOR (i) INDEMNIFICATION OBLIGATIONS, (ii) BREACH OF CONFIDENTIALITY, AND (iii) AMOUNTS DUE UNDER AN ORDER FORM, NEITHER PARTY SHALL BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES, EVEN IF ADVISED OF THE POSSIBILITY. EACH PARTY’S AGGREGATE LIABILITY ARISING FROM THIS AGREEMENT SHALL NOT EXCEED THE FEES PAID OR PAYABLE BY CUSTOMER TO KLAVIYO IN THE TWELVE MONTHS PRECEDING THE EVENT GIVING RISE TO THE CLAIM.\n\n## 11. TERM AND TERMINATION\n\nThis Agreement commences on the Effective Date and continues until all Order Forms expire or are terminated. Either party may terminate for material breach not cured within 30 days of written notice.\n\n## 12. GENERAL\n\nGoverning law: Commonwealth of Massachusetts. Forum: state and federal courts in Suffolk County, Massachusetts. Assignment: neither party may assign without consent (not unreasonably withheld), except in connection with a merger, acquisition, or sale of all or substantially all of its assets.\n\n## EXHIBIT A — SERVICE LEVEL AGREEMENT\n\nKlaviyo will use commercially reasonable efforts to provide a Monthly Uptime Percentage of at least 99.9%, calculated by subtracting from 100% the percentage of minutes during the month in which the Service was Unavailable, excluding scheduled downtime. Service Credits are: 10% of monthly fees for 99.0% – 99.9%; 25% for 95.0% – 99.0%; 50% for less than 95.0%. Service Credits are Customer’s sole and exclusive remedy for any availability-related breach.\n\n> CONFIDENTIAL — Prepared for use in connection with Project Aurora; do not distribute.",
+    "documentProfileSummary": {
+      "status": "failed",
+      "hasProfile": false,
+      "error": "[ProfileBuilder] ANTHROPIC_API_KEY not set",
+      "updatedAt": {
+        "_seconds": 1777868568,
+        "_nanoseconds": 864000000
+      }
+    },
+    "columnName": "Term",
+    "columnType": "text",
+    "columnPrompt": "What is the initial duration of the agreement?",
+    "columnOptions": {},
+    "expected_value": null,
+    "expected_confidence": "low"
+  },
+  {
+    "fileName": "04_AWS_EDP_Summary.pdf",
+    "fileId": "WD3XeznrL312lC7DlrMa",
+    "basePath": "workspaces/0IpDA186hlOikhhgeh8L",
+    "extractedTextCache": "## Page 1\n\n# AMAZON WEB SERVICES — ENTERPRISE DISCOUNT PROGRAM SUMMARY\n\nTier 2\n\n## Counterparty\n\nAmazon Web Services, Inc. (\"AWS\"), a Delaware corporation, P.O. Box 81226, Seattle, WA 98108. The Klaviyo / AWS commercial relationship is governed by the AWS Customer Agreement, the AWS Service Terms, and the AWS Enterprise Discount Program Addendum (the \"EDP\").\n\n## Term and Commitment\n\n| Field                     | Value                                                                 |\n|---------------------------|-----------------------------------------------------------------------|\n| EDP Effective Date        | April 1, 2022                                                         |\n| EDP Term                  | 3 years (April 1, 2022 — March 31, 2025)                              |\n| Total committed spend     | $120 million                                                          |\n| Year 1 minimum            | $30 million                                                           |\n| Year 2 minimum            | $40 million                                                           |\n| Year 3 minimum            | $50 million                                                           |\n| Discount mechanism        | Tiered % discount applied to net new spend within scope of EDP-eligible services |\n| Excluded services         | AWS Marketplace, third-party fees, certain support tiers              |\n| Renewal terms             | Negotiated; the parties have begun preliminary FY2025 renewal discussions |\n| Region usage              | Primary: us-east-1, us-west-2; Secondary: eu-west-1, ap-southeast-2   |\n| Klaviyo internal sponsor  | VP, Engineering — Site Reliability                                    |\n\n## Risk Considerations\n\nKlaviyo's platform is materially dependent on AWS. Migration to an alternative cloud provider would be a multi-quarter effort and would risk service availability and performance during transition. The EDP commits Klaviyo to minimum spend levels; actual spend has tracked above plan in 2022 and 2023, mitigating shortfall risk. Following Project Aurora, the parties anticipate a renegotiation to align term with an acquirer's enterprise framework agreement.\n\n> CONFIDENTIAL — Prepared for use in connection with Project Aurora; do not distribute.",
+    "documentProfileSummary": {
+      "status": "failed",
+      "hasProfile": false,
+      "error": "[ProfileBuilder] ANTHROPIC_API_KEY not set",
+      "updatedAt": {
+        "_seconds": 1777868558,
+        "_nanoseconds": 901000000
+      }
+    },
+    "columnName": "Commitment",
+    "columnType": "currency",
+    "columnPrompt": "What is the total financial commitment?",
+    "columnOptions": {
+      "currencyCode": "USD"
+    },
+    "expected_value": 120000000,
+    "expected_confidence": "high"
+  },
+  {
+    "fileName": "04_AWS_EDP_Summary.pdf",
+    "fileId": "WD3XeznrL312lC7DlrMa",
+    "basePath": "workspaces/0IpDA186hlOikhhgeh8L",
+    "extractedTextCache": "## Page 1\n\n# AMAZON WEB SERVICES — ENTERPRISE DISCOUNT PROGRAM SUMMARY\n\nTier 2\n\n## Counterparty\n\nAmazon Web Services, Inc. (\"AWS\"), a Delaware corporation, P.O. Box 81226, Seattle, WA 98108. The Klaviyo / AWS commercial relationship is governed by the AWS Customer Agreement, the AWS Service Terms, and the AWS Enterprise Discount Program Addendum (the \"EDP\").\n\n## Term and Commitment\n\n| Field                     | Value                                                                 |\n|---------------------------|-----------------------------------------------------------------------|\n| EDP Effective Date        | April 1, 2022                                                         |\n| EDP Term                  | 3 years (April 1, 2022 — March 31, 2025)                              |\n| Total committed spend     | $120 million                                                          |\n| Year 1 minimum            | $30 million                                                           |\n| Year 2 minimum            | $40 million                                                           |\n| Year 3 minimum            | $50 million                                                           |\n| Discount mechanism        | Tiered % discount applied to net new spend within scope of EDP-eligible services |\n| Excluded services         | AWS Marketplace, third-party fees, certain support tiers              |\n| Renewal terms             | Negotiated; the parties have begun preliminary FY2025 renewal discussions |\n| Region usage              | Primary: us-east-1, us-west-2; Secondary: eu-west-1, ap-southeast-2   |\n| Klaviyo internal sponsor  | VP, Engineering — Site Reliability                                    |\n\n## Risk Considerations\n\nKlaviyo's platform is materially dependent on AWS. Migration to an alternative cloud provider would be a multi-quarter effort and would risk service availability and performance during transition. The EDP commits Klaviyo to minimum spend levels; actual spend has tracked above plan in 2022 and 2023, mitigating shortfall risk. Following Project Aurora, the parties anticipate a renegotiation to align term with an acquirer's enterprise framework agreement.\n\n> CONFIDENTIAL — Prepared for use in connection with Project Aurora; do not distribute.",
+    "documentProfileSummary": {
+      "status": "failed",
+      "hasProfile": false,
+      "error": "[ProfileBuilder] ANTHROPIC_API_KEY not set",
+      "updatedAt": {
+        "_seconds": 1777868558,
+        "_nanoseconds": 901000000
+      }
+    },
+    "columnName": "Counterparty",
+    "columnType": "text",
+    "columnPrompt": "Who is the counterparty?",
+    "columnOptions": {},
+    "expected_value": "Amazon Web Services, Inc.",
+    "expected_confidence": "high"
+  },
+  {
+    "fileName": "01_Master_Subscription_Agreement_Template.pdf",
+    "fileId": "fL9CxXrpOBe3sbR9v3tS",
+    "basePath": "workspaces/0IpDA186hlOikhhgeh8L",
+    "extractedTextCache": "## Page 1\n\n# KLAVIYO — MASTER SUBSCRIPTION AGREEMENT (Form)\n\nStandard customer-facing terms — Edition 2023.01\n\n## 1. DEFINITIONS\n\n\"Klaviyo\" means Klaviyo, Inc., a Delaware corporation, or its applicable affiliate. \"Customer\" means the entity identified in the Order Form. \"Order Form\" means an ordering document executed by the parties referencing this Agreement. \"Service\" means the Klaviyo platform identified in the applicable Order Form, including any software, hosting, and related services. \"Customer Data\" means data submitted to the Service by or on behalf of Customer. \"Documentation\" means the user documentation made generally available by Klaviyo at https://help.klaviyo.com.\n\n## 2. PROVISION OF SERVICE\n\nSubject to this Agreement, Klaviyo will (a) make the Service available pursuant to the applicable Order Form, (b) provide standard support, and (c) use commercially reasonable efforts to make the Service available 24/7, except for: (i) planned downtime; (ii) any unavailability caused by circumstances beyond Klaviyo's reasonable control. The Service Level Agreement is set forth in Exhibit A.\n\n## 3. CUSTOMER OBLIGATIONS\n\nCustomer is responsible for: (a) the accuracy, quality, and legality of Customer Data, the means by which Customer acquired the Customer Data, Customer's use of Customer Data with the Service, and the interoperation of any non-Klaviyo applications with which Customer uses the Service; (b) preventing unauthorized access to or use of the Service; (c) complying with applicable laws (including applicable privacy and consumer-protection laws) in connection with its use of the Service; and (d) maintaining proper consents to send communications via the Service in accordance with CAN-SPAM, TCPA, CASL, GDPR, and similar laws.\n\n## 4. PROHIBITED USES\n\nCustomer shall not (a) use the Service in violation of any applicable law; (b) send unsolicited commercial messages; (c) reverse-engineer the Service except as expressly permitted; (d) interfere with the Service's security or integrity; or (e) re-sell the Service except pursuant to a written reseller agreement with Klaviyo.\n\n## 5. FEES AND PAYMENT\n\nCustomer shall pay all fees specified in the applicable Order Form. Except as expressly provided, fees are non-refundable and based on subscriptions purchased, not actual usage. Late payments accrue interest at 1.5% per month or the maximum permitted by law. All fees are exclusive of taxes; Customer is responsible for all taxes other than those based on Klaviyo's net income.\n\n## 6. PROPRIETARY RIGHTS\n\nKlaviyo and its licensors retain all rights, title, and interest in the Service, including all intellectual property rights. Customer retains all rights to Customer Data. Customer hereby grants Klaviyo a worldwide, non-exclusive, royalty-free license to host, copy, transmit, and display Customer Data solely as necessary to provide the Service. Klaviyo may use aggregated and anonymized usage information for product improvement and\n\n> CONFIDENTIAL — Prepared for use in connection with Project Aurora; do not distribute.\n\n---\n\n## Page 2\n\n# Project Aurora — Strictly Confidential / Subject to NDA\n\nPage 2\n\nbenchmarking.\n\n## 7. CONFIDENTIALITY\n\nEach party shall protect the other’s Confidential Information using the same degree of care it uses to protect its own confidential information of like importance, but in no event less than reasonable care.\n\n## 8. WARRANTIES; DISCLAIMER\n\nKlaviyo warrants that the Service will perform materially in accordance with the Documentation. EXCEPT AS EXPRESSLY SET FORTH HEREIN, KLAVIYO MAKES NO WARRANTIES, EXPRESS OR IMPLIED, AND KLAVIYO SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.\n\n## 9. INDEMNIFICATION\n\nKlaviyo shall defend Customer against any third-party claim that the Service infringes a U.S. patent, copyright, or trademark, and shall pay damages finally awarded against Customer. Customer shall defend Klaviyo against any third-party claim arising from Customer Data or Customer’s use of the Service in violation of this Agreement.\n\n## 10. LIMITATION OF LIABILITY\n\nEXCEPT FOR (i) INDEMNIFICATION OBLIGATIONS, (ii) BREACH OF CONFIDENTIALITY, AND (iii) AMOUNTS DUE UNDER AN ORDER FORM, NEITHER PARTY SHALL BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES, EVEN IF ADVISED OF THE POSSIBILITY. EACH PARTY’S AGGREGATE LIABILITY ARISING FROM THIS AGREEMENT SHALL NOT EXCEED THE FEES PAID OR PAYABLE BY CUSTOMER TO KLAVIYO IN THE TWELVE MONTHS PRECEDING THE EVENT GIVING RISE TO THE CLAIM.\n\n## 11. TERM AND TERMINATION\n\nThis Agreement commences on the Effective Date and continues until all Order Forms expire or are terminated. Either party may terminate for material breach not cured within 30 days of written notice.\n\n## 12. GENERAL\n\nGoverning law: Commonwealth of Massachusetts. Forum: state and federal courts in Suffolk County, Massachusetts. Assignment: neither party may assign without consent (not unreasonably withheld), except in connection with a merger, acquisition, or sale of all or substantially all of its assets.\n\n## EXHIBIT A — SERVICE LEVEL AGREEMENT\n\nKlaviyo will use commercially reasonable efforts to provide a Monthly Uptime Percentage of at least 99.9%, calculated by subtracting from 100% the percentage of minutes during the month in which the Service was Unavailable, excluding scheduled downtime. Service Credits are: 10% of monthly fees for 99.0% – 99.9%; 25% for 95.0% – 99.0%; 50% for less than 95.0%. Service Credits are Customer’s sole and exclusive remedy for any availability-related breach.\n\n> CONFIDENTIAL — Prepared for use in connection with Project Aurora; do not distribute.",
+    "documentProfileSummary": {
+      "status": "failed",
+      "hasProfile": false,
+      "error": "[ProfileBuilder] ANTHROPIC_API_KEY not set",
+      "updatedAt": {
+        "_seconds": 1777868568,
+        "_nanoseconds": 864000000
+      }
+    },
+    "columnName": "Nuclear Liability Cap",
+    "columnType": "currency",
+    "columnPrompt": "What is the specific liability cap for nuclear waste spills or radiation exposure?",
+    "columnOptions": {
+      "currencyCode": "USD"
+    },
+    "expected_value": null,
+    "expected_confidence": "low"
+  },
+  {
+    "fileName": "01_Master_Subscription_Agreement_Template.pdf",
+    "fileId": "fL9CxXrpOBe3sbR9v3tS",
+    "basePath": "workspaces/0IpDA186hlOikhhgeh8L",
+    "extractedTextCache": "## Page 1\n\n# KLAVIYO — MASTER SUBSCRIPTION AGREEMENT (Form)\n\nStandard customer-facing terms — Edition 2023.01\n\n## 1. DEFINITIONS\n\n\"Klaviyo\" means Klaviyo, Inc., a Delaware corporation, or its applicable affiliate. \"Customer\" means the entity identified in the Order Form. \"Order Form\" means an ordering document executed by the parties referencing this Agreement. \"Service\" means the Klaviyo platform identified in the applicable Order Form, including any software, hosting, and related services. \"Customer Data\" means data submitted to the Service by or on behalf of Customer. \"Documentation\" means the user documentation made generally available by Klaviyo at https://help.klaviyo.com.\n\n## 2. PROVISION OF SERVICE\n\nSubject to this Agreement, Klaviyo will (a) make the Service available pursuant to the applicable Order Form, (b) provide standard support, and (c) use commercially reasonable efforts to make the Service available 24/7, except for: (i) planned downtime; (ii) any unavailability caused by circumstances beyond Klaviyo's reasonable control. The Service Level Agreement is set forth in Exhibit A.\n\n## 3. CUSTOMER OBLIGATIONS\n\nCustomer is responsible for: (a) the accuracy, quality, and legality of Customer Data, the means by which Customer acquired the Customer Data, Customer's use of Customer Data with the Service, and the interoperation of any non-Klaviyo applications with which Customer uses the Service; (b) preventing unauthorized access to or use of the Service; (c) complying with applicable laws (including applicable privacy and consumer-protection laws) in connection with its use of the Service; and (d) maintaining proper consents to send communications via the Service in accordance with CAN-SPAM, TCPA, CASL, GDPR, and similar laws.\n\n## 4. PROHIBITED USES\n\nCustomer shall not (a) use the Service in violation of any applicable law; (b) send unsolicited commercial messages; (c) reverse-engineer the Service except as expressly permitted; (d) interfere with the Service's security or integrity; or (e) re-sell the Service except pursuant to a written reseller agreement with Klaviyo.\n\n## 5. FEES AND PAYMENT\n\nCustomer shall pay all fees specified in the applicable Order Form. Except as expressly provided, fees are non-refundable and based on subscriptions purchased, not actual usage. Late payments accrue interest at 1.5% per month or the maximum permitted by law. All fees are exclusive of taxes; Customer is responsible for all taxes other than those based on Klaviyo's net income.\n\n## 6. PROPRIETARY RIGHTS\n\nKlaviyo and its licensors retain all rights, title, and interest in the Service, including all intellectual property rights. Customer retains all rights to Customer Data. Customer hereby grants Klaviyo a worldwide, non-exclusive, royalty-free license to host, copy, transmit, and display Customer Data solely as necessary to provide the Service. Klaviyo may use aggregated and anonymized usage information for product improvement and\n\n> CONFIDENTIAL — Prepared for use in connection with Project Aurora; do not distribute.\n\n---\n\n## Page 2\n\n# Project Aurora — Strictly Confidential / Subject to NDA\n\nPage 2\n\nbenchmarking.\n\n## 7. CONFIDENTIALITY\n\nEach party shall protect the other’s Confidential Information using the same degree of care it uses to protect its own confidential information of like importance, but in no event less than reasonable care.\n\n## 8. WARRANTIES; DISCLAIMER\n\nKlaviyo warrants that the Service will perform materially in accordance with the Documentation. EXCEPT AS EXPRESSLY SET FORTH HEREIN, KLAVIYO MAKES NO WARRANTIES, EXPRESS OR IMPLIED, AND KLAVIYO SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.\n\n## 9. INDEMNIFICATION\n\nKlaviyo shall defend Customer against any third-party claim that the Service infringes a U.S. patent, copyright, or trademark, and shall pay damages finally awarded against Customer. Customer shall defend Klaviyo against any third-party claim arising from Customer Data or Customer’s use of the Service in violation of this Agreement.\n\n## 10. LIMITATION OF LIABILITY\n\nEXCEPT FOR (i) INDEMNIFICATION OBLIGATIONS, (ii) BREACH OF CONFIDENTIALITY, AND (iii) AMOUNTS DUE UNDER AN ORDER FORM, NEITHER PARTY SHALL BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES, EVEN IF ADVISED OF THE POSSIBILITY. EACH PARTY’S AGGREGATE LIABILITY ARISING FROM THIS AGREEMENT SHALL NOT EXCEED THE FEES PAID OR PAYABLE BY CUSTOMER TO KLAVIYO IN THE TWELVE MONTHS PRECEDING THE EVENT GIVING RISE TO THE CLAIM.\n\n## 11. TERM AND TERMINATION\n\nThis Agreement commences on the Effective Date and continues until all Order Forms expire or are terminated. Either party may terminate for material breach not cured within 30 days of written notice.\n\n## 12. GENERAL\n\nGoverning law: Commonwealth of Massachusetts. Forum: state and federal courts in Suffolk County, Massachusetts. Assignment: neither party may assign without consent (not unreasonably withheld), except in connection with a merger, acquisition, or sale of all or substantially all of its assets.\n\n## EXHIBIT A — SERVICE LEVEL AGREEMENT\n\nKlaviyo will use commercially reasonable efforts to provide a Monthly Uptime Percentage of at least 99.9%, calculated by subtracting from 100% the percentage of minutes during the month in which the Service was Unavailable, excluding scheduled downtime. Service Credits are: 10% of monthly fees for 99.0% – 99.9%; 25% for 95.0% – 99.0%; 50% for less than 95.0%. Service Credits are Customer’s sole and exclusive remedy for any availability-related breach.\n\n> CONFIDENTIAL — Prepared for use in connection with Project Aurora; do not distribute.",
+    "documentProfileSummary": {
+      "status": "failed",
+      "hasProfile": false,
+      "error": "[ProfileBuilder] ANTHROPIC_API_KEY not set",
+      "updatedAt": {
+        "_seconds": 1777868568,
+        "_nanoseconds": 864000000
+      }
+    },
+    "columnName": "Assignment",
+    "columnType": "boolean",
+    "columnPrompt": "Can either party assign this agreement without prior written consent?",
+    "columnOptions": {},
+    "expected_value": false,
+    "expected_confidence": "high"
+  },
+  {
+    "fileName": "01_Master_Subscription_Agreement_Template.pdf",
+    "fileId": "fL9CxXrpOBe3sbR9v3tS",
+    "basePath": "workspaces/0IpDA186hlOikhhgeh8L",
+    "extractedTextCache": "## Page 1\n\n# KLAVIYO — MASTER SUBSCRIPTION AGREEMENT (Form)\n\nStandard customer-facing terms — Edition 2023.01\n\n## 1. DEFINITIONS\n\n\"Klaviyo\" means Klaviyo, Inc., a Delaware corporation, or its applicable affiliate. \"Customer\" means the entity identified in the Order Form. \"Order Form\" means an ordering document executed by the parties referencing this Agreement. \"Service\" means the Klaviyo platform identified in the applicable Order Form, including any software, hosting, and related services. \"Customer Data\" means data submitted to the Service by or on behalf of Customer. \"Documentation\" means the user documentation made generally available by Klaviyo at https://help.klaviyo.com.\n\n## 2. PROVISION OF SERVICE\n\nSubject to this Agreement, Klaviyo will (a) make the Service available pursuant to the applicable Order Form, (b) provide standard support, and (c) use commercially reasonable efforts to make the Service available 24/7, except for: (i) planned downtime; (ii) any unavailability caused by circumstances beyond Klaviyo's reasonable control. The Service Level Agreement is set forth in Exhibit A.\n\n## 3. CUSTOMER OBLIGATIONS\n\nCustomer is responsible for: (a) the accuracy, quality, and legality of Customer Data, the means by which Customer acquired the Customer Data, Customer's use of Customer Data with the Service, and the interoperation of any non-Klaviyo applications with which Customer uses the Service; (b) preventing unauthorized access to or use of the Service; (c) complying with applicable laws (including applicable privacy and consumer-protection laws) in connection with its use of the Service; and (d) maintaining proper consents to send communications via the Service in accordance with CAN-SPAM, TCPA, CASL, GDPR, and similar laws.\n\n## 4. PROHIBITED USES\n\nCustomer shall not (a) use the Service in violation of any applicable law; (b) send unsolicited commercial messages; (c) reverse-engineer the Service except as expressly permitted; (d) interfere with the Service's security or integrity; or (e) re-sell the Service except pursuant to a written reseller agreement with Klaviyo.\n\n## 5. FEES AND PAYMENT\n\nCustomer shall pay all fees specified in the applicable Order Form. Except as expressly provided, fees are non-refundable and based on subscriptions purchased, not actual usage. Late payments accrue interest at 1.5% per month or the maximum permitted by law. All fees are exclusive of taxes; Customer is responsible for all taxes other than those based on Klaviyo's net income.\n\n## 6. PROPRIETARY RIGHTS\n\nKlaviyo and its licensors retain all rights, title, and interest in the Service, including all intellectual property rights. Customer retains all rights to Customer Data. Customer hereby grants Klaviyo a worldwide, non-exclusive, royalty-free license to host, copy, transmit, and display Customer Data solely as necessary to provide the Service. Klaviyo may use aggregated and anonymized usage information for product improvement and\n\n> CONFIDENTIAL — Prepared for use in connection with Project Aurora; do not distribute.\n\n---\n\n## Page 2\n\n# Project Aurora — Strictly Confidential / Subject to NDA\n\nPage 2\n\nbenchmarking.\n\n## 7. CONFIDENTIALITY\n\nEach party shall protect the other’s Confidential Information using the same degree of care it uses to protect its own confidential information of like importance, but in no event less than reasonable care.\n\n## 8. WARRANTIES; DISCLAIMER\n\nKlaviyo warrants that the Service will perform materially in accordance with the Documentation. EXCEPT AS EXPRESSLY SET FORTH HEREIN, KLAVIYO MAKES NO WARRANTIES, EXPRESS OR IMPLIED, AND KLAVIYO SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.\n\n## 9. INDEMNIFICATION\n\nKlaviyo shall defend Customer against any third-party claim that the Service infringes a U.S. patent, copyright, or trademark, and shall pay damages finally awarded against Customer. Customer shall defend Klaviyo against any third-party claim arising from Customer Data or Customer’s use of the Service in violation of this Agreement.\n\n## 10. LIMITATION OF LIABILITY\n\nEXCEPT FOR (i) INDEMNIFICATION OBLIGATIONS, (ii) BREACH OF CONFIDENTIALITY, AND (iii) AMOUNTS DUE UNDER AN ORDER FORM, NEITHER PARTY SHALL BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES, EVEN IF ADVISED OF THE POSSIBILITY. EACH PARTY’S AGGREGATE LIABILITY ARISING FROM THIS AGREEMENT SHALL NOT EXCEED THE FEES PAID OR PAYABLE BY CUSTOMER TO KLAVIYO IN THE TWELVE MONTHS PRECEDING THE EVENT GIVING RISE TO THE CLAIM.\n\n## 11. TERM AND TERMINATION\n\nThis Agreement commences on the Effective Date and continues until all Order Forms expire or are terminated. Either party may terminate for material breach not cured within 30 days of written notice.\n\n## 12. GENERAL\n\nGoverning law: Commonwealth of Massachusetts. Forum: state and federal courts in Suffolk County, Massachusetts. Assignment: neither party may assign without consent (not unreasonably withheld), except in connection with a merger, acquisition, or sale of all or substantially all of its assets.\n\n## EXHIBIT A — SERVICE LEVEL AGREEMENT\n\nKlaviyo will use commercially reasonable efforts to provide a Monthly Uptime Percentage of at least 99.9%, calculated by subtracting from 100% the percentage of minutes during the month in which the Service was Unavailable, excluding scheduled downtime. Service Credits are: 10% of monthly fees for 99.0% – 99.9%; 25% for 95.0% – 99.0%; 50% for less than 95.0%. Service Credits are Customer’s sole and exclusive remedy for any availability-related breach.\n\n> CONFIDENTIAL — Prepared for use in connection with Project Aurora; do not distribute.",
+    "documentProfileSummary": {
+      "status": "failed",
+      "hasProfile": true,
+      "error": "[ProfileBuilder] ANTHROPIC_API_KEY not set",
+      "updatedAt": {
+        "_seconds": 1777868568,
+        "_nanoseconds": 864000000
+      },
+      "category": "contract",
+      "typeConfidence": "high",
+      "documentType": "contract",
+      "keyFacts": {
+        "parties": {
+          "value": "Acme Corp",
+          "quote": "between Acme Corp",
+          "page": 1
+        }
+      }
+    },
+    "columnName": "Supplier Name",
+    "columnType": "text",
+    "columnPrompt": "Who is the supplier or vendor?",
+    "columnOptions": {},
+    "expected_value": "Klaviyo, Inc.",
+    "expected_confidence": "high"
+  },
+  {
+    "fileName": "04_AWS_EDP_Summary.pdf",
+    "fileId": "WD3XeznrL312lC7DlrMa",
+    "basePath": "workspaces/0IpDA186hlOikhhgeh8L",
+    "extractedTextCache": "## Page 1\n\n# AMAZON WEB SERVICES — ENTERPRISE DISCOUNT PROGRAM SUMMARY\n\nTier 2\n\n## Counterparty\n\nAmazon Web Services, Inc. (\"AWS\"), a Delaware corporation, P.O. Box 81226, Seattle, WA 98108. The Klaviyo / AWS commercial relationship is governed by the AWS Customer Agreement, the AWS Service Terms, and the AWS Enterprise Discount Program Addendum (the \"EDP\").\n\n## Term and Commitment\n\n| Field                     | Value                                                                 |\n|---------------------------|-----------------------------------------------------------------------|\n| EDP Effective Date        | April 1, 2022                                                         |\n| EDP Term                  | 3 years (April 1, 2022 — March 31, 2025)                              |\n| Total committed spend     | $120 million                                                          |\n| Year 1 minimum            | $30 million                                                           |\n| Year 2 minimum            | $40 million                                                           |\n| Year 3 minimum            | $50 million                                                           |\n| Discount mechanism        | Tiered % discount applied to net new spend within scope of EDP-eligible services |\n| Excluded services         | AWS Marketplace, third-party fees, certain support tiers              |\n| Renewal terms             | Negotiated; the parties have begun preliminary FY2025 renewal discussions |\n| Region usage              | Primary: us-east-1, us-west-2; Secondary: eu-west-1, ap-southeast-2   |\n| Klaviyo internal sponsor  | VP, Engineering — Site Reliability                                    |\n\n## Risk Considerations\n\nKlaviyo's platform is materially dependent on AWS. Migration to an alternative cloud provider would be a multi-quarter effort and would risk service availability and performance during transition. The EDP commits Klaviyo to minimum spend levels; actual spend has tracked above plan in 2022 and 2023, mitigating shortfall risk. Following Project Aurora, the parties anticipate a renegotiation to align term with an acquirer's enterprise framework agreement.\n\n> CONFIDENTIAL — Prepared for use in connection with Project Aurora; do not distribute.",
+    "documentProfileSummary": {
+      "status": "failed",
+      "hasProfile": true,
+      "error": "[ProfileBuilder] ANTHROPIC_API_KEY not set",
+      "updatedAt": {
+        "_seconds": 1777868558,
+        "_nanoseconds": 901000000
+      },
+      "category": "contract",
+      "typeConfidence": "high",
+      "documentType": "amendment",
+      "keyFacts": {
+        "governingLaw": {
+          "value": "NY",
+          "quote": "test",
+          "page": 1
+        }
+      }
+    },
+    "columnName": "Governing Law",
+    "columnType": "text",
+    "columnPrompt": "Governing law?",
+    "columnOptions": {},
+    "expected_value": null,
+    "expected_confidence": "low"
+  },
+  {
+    "fileName": "04_AWS_EDP_Summary.pdf",
+    "fileId": "WD3XeznrL312lC7DlrMa",
+    "basePath": "workspaces/0IpDA186hlOikhhgeh8L",
+    "extractedTextCache": "## Page 1\n\n# AMAZON WEB SERVICES — ENTERPRISE DISCOUNT PROGRAM SUMMARY\n\nTier 2\n\n## Counterparty\n\nAmazon Web Services, Inc. (\"AWS\"), a Delaware corporation, P.O. Box 81226, Seattle, WA 98108. The Klaviyo / AWS commercial relationship is governed by the AWS Customer Agreement, the AWS Service Terms, and the AWS Enterprise Discount Program Addendum (the \"EDP\").\n\n## Term and Commitment\n\n| Field                     | Value                                                                 |\n|---------------------------|-----------------------------------------------------------------------|\n| EDP Effective Date        | April 1, 2022                                                         |\n| EDP Term                  | 3 years (April 1, 2022 — March 31, 2025)                              |\n| Total committed spend     | $120 million                                                          |\n| Year 1 minimum            | $30 million                                                           |\n| Year 2 minimum            | $40 million                                                           |\n| Year 3 minimum            | $50 million                                                           |\n| Discount mechanism        | Tiered % discount applied to net new spend within scope of EDP-eligible services |\n| Excluded services         | AWS Marketplace, third-party fees, certain support tiers              |\n| Renewal terms             | Negotiated; the parties have begun preliminary FY2025 renewal discussions |\n| Region usage              | Primary: us-east-1, us-west-2; Secondary: eu-west-1, ap-southeast-2   |\n| Klaviyo internal sponsor  | VP, Engineering — Site Reliability                                    |\n\n## Risk Considerations\n\nKlaviyo's platform is materially dependent on AWS. Migration to an alternative cloud provider would be a multi-quarter effort and would risk service availability and performance during transition. The EDP commits Klaviyo to minimum spend levels; actual spend has tracked above plan in 2022 and 2023, mitigating shortfall risk. Following Project Aurora, the parties anticipate a renegotiation to align term with an acquirer's enterprise framework agreement.\n\n> CONFIDENTIAL — Prepared for use in connection with Project Aurora; do not distribute.",
+    "documentProfileSummary": {
+      "status": "failed",
+      "hasProfile": true,
+      "error": "[ProfileBuilder] ANTHROPIC_API_KEY not set",
+      "updatedAt": {
+        "_seconds": 1777868558,
+        "_nanoseconds": 901000000
+      },
+      "category": "contract",
+      "typeConfidence": "high",
+      "documentType": "contract",
+      "keyFacts": {
+        "term": {
+          "value": "5 years",
+          "quote": "this quote does not exist on page",
+          "page": 1
+        }
+      }
+    },
+    "columnName": "Term",
+    "columnType": "text",
+    "columnPrompt": "Term?",
+    "columnOptions": {},
+    "expected_value": "3 years (April 1, 2022 — March 31, 2025)",
+    "expected_confidence": "high"
+  }
+]
