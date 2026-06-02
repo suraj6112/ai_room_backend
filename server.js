@@ -68,7 +68,7 @@ const execAsync = (command, options) => {
 };
 
 // Initialize Firebase Admin
-const firebaseConfig = {
+admin.initializeApp({
   storageBucket:
     process.env.FIREBASE_STORAGE_BUCKET ||
     (() => {
@@ -76,18 +76,7 @@ const firebaseConfig = {
         "FIREBASE_STORAGE_BUCKET env var is required. Set it to <your-project-id>.appspot.com",
       );
     })(),
-};
-
-if (process.env.FIREBASE_PRIVATE_KEY && process.env.FIREBASE_CLIENT_EMAIL) {
-  const privateKey = process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n");
-  firebaseConfig.credential = admin.credential.cert({
-    projectId: process.env.FIREBASE_PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: privateKey,
-  });
-}
-
-admin.initializeApp(firebaseConfig);
+});
 const db = admin.firestore();
 const bucket = admin.storage().bucket();
 
@@ -792,53 +781,97 @@ app.post("/api/v1/internal/worker/reviewTask", handleReviewTask);
 // BEFORE the global API-key middleware so it can do its own auth.
 // @see docs/design/CONTENT_SEARCH.md
 // =============================================================================
-app.post("/search", async (req, res) => {
-  // 1. Verify Firebase ID token from Authorization: Bearer header.
+async function verifySearchRequestAccess(req, res) {
   const authHeader = req.headers.authorization || "";
   const match = authHeader.match(/^Bearer\s+(.+)$/i);
   if (!match) {
-    return res
+    res
       .status(401)
       .json({ error: "Authorization: Bearer <Firebase ID token> required" });
+    return null;
   }
+
   let uid;
   try {
     const decoded = await admin.auth().verifyIdToken(match[1]);
     uid = decoded.uid;
   } catch (e) {
-    return res.status(401).json({ error: `Invalid ID token: ${e.message}` });
+    res.status(401).json({ error: `Invalid ID token: ${e.message}` });
+    return null;
   }
 
+  const { basePath } = req.body || {};
+  if (!basePath || typeof basePath !== "string") {
+    res.status(400).json({ error: "basePath is required" });
+    return null;
+  }
+
+  const headerBasePath = req.headers["x-base-path"];
+  if (
+    headerBasePath &&
+    typeof headerBasePath === "string" &&
+    headerBasePath !== basePath
+  ) {
+    res.status(400).json({
+      error: "basePath mismatch between request body and X-Base-Path header",
+    });
+    return null;
+  }
+
+  if (basePath.startsWith("users/")) {
+    if (basePath !== `users/${uid}`) {
+      res.status(403).json({ error: "Cross-user search not allowed" });
+      return null;
+    }
+  } else if (basePath.startsWith("workspaces/")) {
+    const wsId = basePath.split("/")[1];
+    if (!wsId) {
+      res.status(400).json({ error: "Invalid basePath" });
+      return null;
+    }
+    const memberSnap = await db.doc(`workspaces/${wsId}/members/${uid}`).get();
+    if (!memberSnap.exists) {
+      res.status(403).json({ error: "Not a workspace member" });
+      return null;
+    }
+  } else {
+    res
+      .status(400)
+      .json({ error: "basePath must start with users/ or workspaces/" });
+    return null;
+  }
+
+  return { uid, basePath, headerBasePath };
+}
+
+app.post("/search", async (req, res) => {
+  // 1. Verify Firebase ID token from Authorization: Bearer header.
   const { query, basePath } = req.body || {};
   if (!query || typeof query !== "string" || query.trim().length < 2) {
     return res
       .status(400)
       .json({ error: "query is required (min 2 characters)" });
   }
-  if (!basePath || typeof basePath !== "string") {
-    return res.status(400).json({ error: "basePath is required" });
-  }
 
-  // 2. Tenant access check — mirrors firestore.rules and the
-  // searchCloudFiles Cloud Function.
-  if (basePath.startsWith("users/")) {
-    if (basePath !== `users/${uid}`) {
-      return res.status(403).json({ error: "Cross-user search not allowed" });
-    }
-  } else if (basePath.startsWith("workspaces/")) {
-    const wsId = basePath.split("/")[1];
-    if (!wsId) {
-      return res.status(400).json({ error: "Invalid basePath" });
-    }
-    const memberSnap = await db.doc(`workspaces/${wsId}/members/${uid}`).get();
-    if (!memberSnap.exists) {
-      return res.status(403).json({ error: "Not a workspace member" });
-    }
-  } else {
-    return res
-      .status(400)
-      .json({ error: "basePath must start with users/ or workspaces/" });
-  }
+  const access = await verifySearchRequestAccess(req, res);
+  if (!access) return;
+  const { uid, headerBasePath } = access;
+
+  console.log("[FileProcessor][search debug] Incoming /search request", {
+    uid,
+    query: query.trim(),
+    bodyBasePath: basePath,
+    headerBasePath: headerBasePath || null,
+    folder_id: req.body?.folder_id ?? null,
+    folder_ids: req.body?.folder_ids ?? null,
+    folder_paths: req.body?.folder_paths ?? null,
+    include_subfolders: req.body?.include_subfolders ?? null,
+    limit: req.body?.limit ?? null,
+    min_similarity: req.body?.min_similarity ?? null,
+    group_by_file: req.body?.group_by_file ?? null,
+    use_hyde: req.body?.use_hyde ?? null,
+    hybrid: req.body?.hybrid ?? null,
+  });
 
   // 3. Run semantic search with analytics.
   try {
@@ -887,6 +920,77 @@ app.post("/search", async (req, res) => {
     console.error("[FileProcessor] /search failed:", e);
     if (e.status === 400) return res.status(400).json({ error: e.message });
     return res.status(500).json({ error: `Search failed: ${e.message}` });
+  }
+});
+
+app.post("/search/reindex", async (req, res) => {
+  const access = await verifySearchRequestAccess(req, res);
+  if (!access) return;
+
+  const { uid, basePath } = access;
+  const maxFiles = Math.min(Math.max(Number(req.body?.limit) || 200, 1), 1000);
+
+  try {
+    console.log("[FileProcessor][search debug] Reindex request", {
+      uid,
+      basePath,
+      maxFiles,
+    });
+
+    const filesSnap = await db
+      .collection(`${basePath}/files`)
+      .orderBy("createdAt", "desc")
+      .limit(maxFiles)
+      .get();
+
+    const results = [];
+    for (const docSnap of filesSnap.docs) {
+      const fileData = docSnap.data() || {};
+      const fileId = docSnap.id;
+
+      if (fileData.processingStatus && fileData.processingStatus !== "completed") {
+        results.push({ fileId, skipped: "not_completed" });
+        continue;
+      }
+
+      try {
+        const indexResult = await indexCloudFile(fileId, basePath, fileData);
+        results.push({ fileId, ...indexResult });
+      } catch (err) {
+        console.warn("[FileProcessor][search debug] Reindex failed for file", {
+          basePath,
+          fileId,
+          error: err.message,
+        });
+        results.push({ fileId, error: err.message });
+      }
+    }
+
+    const summary = results.reduce(
+      (acc, item) => {
+        if (item.error) acc.failed += 1;
+        else if (item.skipped) acc.skipped += 1;
+        else acc.indexed += 1;
+        acc.chunksIndexed += Number(item.chunksIndexed) || 0;
+        return acc;
+      },
+      { total: results.length, indexed: 0, skipped: 0, failed: 0, chunksIndexed: 0 },
+    );
+
+    console.log("[FileProcessor][search debug] Reindex complete", {
+      basePath,
+      ...summary,
+    });
+
+    return res.json({
+      success: true,
+      basePath,
+      summary,
+      results,
+    });
+  } catch (e) {
+    console.error("[FileProcessor] /search/reindex failed:", e);
+    return res.status(500).json({ error: `Reindex failed: ${e.message}` });
   }
 });
 

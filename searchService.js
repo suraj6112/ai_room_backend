@@ -17,6 +17,7 @@ const {
   getDocTypesenseClient,
   getCollectionName,
   generateEmbeddingsWithRetry,
+  indexCloudFile,
 } = require('./indexService');
 const { generateHydeExpansion } = require('./hyde');
 
@@ -28,6 +29,10 @@ const { generateHydeExpansion } = require('./hyde');
 const scopedKeysCache = new Map(); // key: `${uid}::${basePath}` → { client, expiresAt }
 const SCOPED_KEY_TTL_SECONDS = 60;   // Typesense key TTL
 const SCOPED_KEY_CACHE_SECONDS = 50; // serve from cache until 10s before expiry
+const autoReindexState = new Map(); // key: basePath -> { running, lastStartedAt }
+const staleChunkDeleteState = new Set(); // key: `${basePath}::${fileId}`
+const AUTO_REINDEX_COOLDOWN_MS = Number(process.env.SEARCH_AUTO_REINDEX_COOLDOWN_MS) || 10 * 60 * 1000;
+const AUTO_REINDEX_LIMIT = Math.min(Math.max(Number(process.env.SEARCH_AUTO_REINDEX_LIMIT) || 200, 1), 1000);
 
 /**
  * Detects if the query contains entity-like tokens, quoted phrases, digits,
@@ -263,8 +268,134 @@ function groupByFile(hits) {
 
 function escapeFilterValue(v) {
   const s = String(v);
-  if (/[\s,()[\]&|`]/.test(s)) return '`' + s.replace(/`/g, '') + '`';
+  if (/[\s,()[\]&|`/]/.test(s)) return '`' + s.replace(/`/g, '') + '`';
   return s;
+}
+
+function summarizeHitForDebug(hit) {
+  if (!hit) return null;
+  return {
+    file_id: hit.file_id,
+    base_path: hit.base_path,
+    file_name: hit.file_name,
+    folder_id: hit.folder_id,
+    similarity: hit.similarity,
+  };
+}
+
+function scheduleAutoReindexForLegacyIndex(basePath, reason = 'legacy_index_fallback') {
+  if (process.env.SEARCH_AUTO_REINDEX_ON_LEGACY === 'false') return;
+  if (!basePath || typeof basePath !== 'string') return;
+
+  const now = Date.now();
+  const state = autoReindexState.get(basePath);
+  if (state?.running) {
+    console.log('[searchService][debug] Auto reindex already running', { basePath, reason });
+    return;
+  }
+  if (state?.lastStartedAt && now - state.lastStartedAt < AUTO_REINDEX_COOLDOWN_MS) {
+    console.log('[searchService][debug] Auto reindex skipped by cooldown', {
+      basePath,
+      reason,
+      nextAllowedInMs: AUTO_REINDEX_COOLDOWN_MS - (now - state.lastStartedAt),
+    });
+    return;
+  }
+
+  autoReindexState.set(basePath, { running: true, lastStartedAt: now });
+  setImmediate(async () => {
+    const startedAt = Date.now();
+    const db = admin.firestore();
+    const summary = { total: 0, indexed: 0, skipped: 0, failed: 0, chunksIndexed: 0 };
+
+    console.warn('[searchService][debug] Auto reindex started for legacy search index', {
+      basePath,
+      reason,
+      limit: AUTO_REINDEX_LIMIT,
+    });
+
+    try {
+      const filesSnap = await db
+        .collection(`${basePath}/files`)
+        .orderBy('createdAt', 'desc')
+        .limit(AUTO_REINDEX_LIMIT)
+        .get();
+
+      summary.total = filesSnap.size;
+
+      for (const docSnap of filesSnap.docs) {
+        const fileId = docSnap.id;
+        const fileData = docSnap.data() || {};
+        if (fileData.processingStatus && fileData.processingStatus !== 'completed') {
+          summary.skipped += 1;
+          continue;
+        }
+
+        try {
+          const result = await indexCloudFile(fileId, basePath, fileData);
+          if (result?.skipped) {
+            summary.skipped += 1;
+          } else {
+            summary.indexed += 1;
+            summary.chunksIndexed += Number(result?.chunksIndexed) || 0;
+          }
+        } catch (err) {
+          summary.failed += 1;
+          console.warn('[searchService][debug] Auto reindex file failed', {
+            basePath,
+            fileId,
+            error: err.message,
+          });
+        }
+      }
+
+      console.warn('[searchService][debug] Auto reindex finished', {
+        basePath,
+        durationMs: Date.now() - startedAt,
+        ...summary,
+      });
+    } catch (err) {
+      console.warn('[searchService][debug] Auto reindex failed', {
+        basePath,
+        error: err.message,
+      });
+    } finally {
+      autoReindexState.set(basePath, { running: false, lastStartedAt: startedAt });
+    }
+  });
+}
+
+function scheduleDeleteIndexedChunks(basePath, fileId, reason) {
+  if (!basePath || !fileId) return;
+  const key = `${basePath}::${fileId}`;
+  if (staleChunkDeleteState.has(key)) return;
+  staleChunkDeleteState.add(key);
+
+  setImmediate(async () => {
+    try {
+      const client = getDocTypesenseClient();
+      if (!client) return;
+      const collectionName = getCollectionName(basePath);
+      const deleteResult = await client.collections(collectionName).documents().delete({
+        filter_by: `cloudfile_id:=${escapeFilterValue(fileId)}`,
+      });
+      console.warn('[searchService][debug] Deleted stale Typesense chunks for invalid search file', {
+        basePath,
+        fileId,
+        reason,
+        deleted: deleteResult?.num_deleted || 0,
+      });
+    } catch (err) {
+      console.warn('[searchService][debug] Failed to delete stale Typesense chunks', {
+        basePath,
+        fileId,
+        reason,
+        error: err.message,
+      });
+    } finally {
+      staleChunkDeleteState.delete(key);
+    }
+  });
 }
 
 function getQueryTokens(query) {
@@ -334,18 +465,249 @@ async function filterExistingCloudFiles(hits, basePath) {
       .map(h => h.file_id)
       .filter(id => typeof id === 'string' && id.length > 0)
   ));
-  if (fileIds.length === 0) return hits;
+  if (fileIds.length === 0) {
+    console.log('[searchService][debug] Firestore validation skipped: no file_ids in hits', {
+      basePath,
+      hitCount: hits.length,
+    });
+    return hits;
+  }
 
   const db = admin.firestore();
   const refs = fileIds.map(id => db.doc(`${basePath}/files/${id}`));
+  console.log('[searchService][debug] Firestore validating search hits', {
+    basePath,
+    fileIds,
+    hitCount: hits.length,
+  });
   const snaps = await db.getAll(...refs);
-  const existingIds = new Set(
-    snaps
-      .filter(snap => snap.exists)
-      .map(snap => snap.id)
-  );
+  const filesById = new Map();
+  for (const snap of snaps) {
+    if (snap.exists) filesById.set(snap.id, snap.data() || {});
+  }
 
-  return hits.filter(h => existingIds.has(h.file_id));
+  const storageExistsByPath = new Map();
+  const storagePaths = Array.from(new Set(
+    Array.from(filesById.values())
+      .map(fileData => fileData.storagePath)
+      .filter(path => typeof path === 'string' && path.length > 0)
+  ));
+  if (storagePaths.length > 0) {
+    try {
+      const bucket = admin.storage().bucket();
+      await Promise.all(storagePaths.map(async storagePath => {
+        try {
+          const [exists] = await bucket.file(storagePath).exists();
+          storageExistsByPath.set(storagePath, !!exists);
+        } catch (err) {
+          storageExistsByPath.set(storagePath, null);
+          console.warn('[searchService][debug] Storage existence check failed', {
+            basePath,
+            storagePath,
+            error: err.message,
+          });
+        }
+      }));
+    } catch (err) {
+      console.warn('[searchService][debug] Storage bucket unavailable during search validation', {
+        basePath,
+        error: err.message,
+      });
+    }
+  }
+
+  const folderIds = Array.from(new Set(
+    Array.from(filesById.values())
+      .flatMap(fileData => {
+        const ids = [];
+        if (fileData.folderId && fileData.folderId !== 'root') ids.push(fileData.folderId);
+        if (Array.isArray(fileData.folderPathIds)) {
+          ids.push(...fileData.folderPathIds.filter(id => id && id !== 'root'));
+        }
+        return ids;
+      })
+  ));
+  const foldersById = new Map();
+  if (folderIds.length > 0) {
+    try {
+      const folderRefs = folderIds.map(id => db.doc(`${basePath}/file_folders/${id}`));
+      const folderSnaps = await db.getAll(...folderRefs);
+      for (const snap of folderSnaps) {
+        if (snap.exists) foldersById.set(snap.id, snap.data() || {});
+      }
+    } catch (err) {
+      console.warn('[searchService][debug] Folder validation lookup failed', {
+        basePath,
+        folderIds,
+        error: err.message,
+      });
+    }
+  }
+
+  const kept = [];
+  for (const h of hits) {
+    const fileData = filesById.get(h.file_id);
+    const debugBase = summarizeHitForDebug(h);
+    if (!fileData) {
+      console.log('[searchService][debug] DROP search hit: file doc missing in requested workspace', {
+        basePath,
+        ...debugBase,
+        expectedDocPath: `${basePath}/files/${h.file_id}`,
+      });
+      scheduleDeleteIndexedChunks(basePath, h.file_id, 'file_doc_missing');
+      continue;
+    }
+
+    if (fileData.deleted === true || fileData.isDeleted === true || fileData.trashed === true || fileData.archived === true) {
+      console.log('[searchService][debug] DROP search hit: file marked deleted/hidden', {
+        basePath,
+        ...debugBase,
+        deleted: fileData.deleted || null,
+        isDeleted: fileData.isDeleted || null,
+        trashed: fileData.trashed || null,
+        archived: fileData.archived || null,
+      });
+      scheduleDeleteIndexedChunks(basePath, h.file_id, 'file_marked_deleted_or_hidden');
+      continue;
+    }
+
+    if (fileData.processingStatus && fileData.processingStatus !== 'completed') {
+      console.log('[searchService][debug] DROP search hit: file is not completed', {
+        basePath,
+        ...debugBase,
+        processingStatus: fileData.processingStatus,
+      });
+      continue;
+    }
+
+    const storagePath = fileData.storagePath || '';
+    if (!storagePath) {
+      console.log('[searchService][debug] DROP search hit: file has no storagePath', {
+        basePath,
+        ...debugBase,
+      });
+      scheduleDeleteIndexedChunks(basePath, h.file_id, 'missing_storage_path');
+      continue;
+    }
+
+    if (storagePath && !storagePath.startsWith(`${basePath}/files/${h.file_id}/`)) {
+      console.log('[searchService][debug] DROP search hit: storagePath belongs elsewhere', {
+        basePath,
+        ...debugBase,
+        firestoreStoragePath: storagePath,
+        expectedPrefix: `${basePath}/files/${h.file_id}/`,
+      });
+      scheduleDeleteIndexedChunks(basePath, h.file_id, 'storage_path_wrong_workspace');
+      continue;
+    }
+
+    if (storageExistsByPath.get(storagePath) === false) {
+      console.log('[searchService][debug] DROP search hit: storage object missing', {
+        basePath,
+        ...debugBase,
+        firestoreStoragePath: storagePath,
+      });
+      scheduleDeleteIndexedChunks(basePath, h.file_id, 'storage_object_missing');
+      continue;
+    }
+
+    const firestoreName = fileData.name || '';
+    const firestoreExt = (fileData.extension || '').toLowerCase();
+    const firestoreFolderId = fileData.folderId || 'root';
+    const hitName = h.file_name || '';
+    const hitExt = (h.file_extension || '').toLowerCase();
+    const hitFolderId = h.folder_id || 'root';
+    const firestoreFolderPathIds = Array.isArray(fileData.folderPathIds)
+      ? fileData.folderPathIds
+      : [];
+    const hitFolderPathIds = Array.isArray(h.folder_path_ids)
+      ? h.folder_path_ids
+      : [];
+    const folderPathIdsToValidate = Array.from(new Set([
+      ...firestoreFolderPathIds,
+      ...hitFolderPathIds,
+      firestoreFolderId,
+      hitFolderId,
+    ].filter(id => id && id !== 'root')));
+
+    const missingFolderId = folderPathIdsToValidate.find(id => !foldersById.has(id));
+    if (missingFolderId) {
+      console.log('[searchService][debug] DROP search hit: folder path missing in workspace', {
+        basePath,
+        ...debugBase,
+        missingFolderId,
+        firestoreFolderId,
+        hitFolderId,
+        firestoreFolderPathIds,
+        hitFolderPathIds,
+      });
+      scheduleDeleteIndexedChunks(basePath, h.file_id, 'folder_path_missing');
+      continue;
+    }
+
+    const hiddenFolderId = folderPathIdsToValidate.find(id => {
+      const folderData = foldersById.get(id) || {};
+      return folderData.deleted === true
+        || folderData.isDeleted === true
+        || folderData.trashed === true
+        || folderData.archived === true;
+    });
+    if (hiddenFolderId) {
+      console.log('[searchService][debug] DROP search hit: folder path hidden/deleted', {
+        basePath,
+        ...debugBase,
+        hiddenFolderId,
+      });
+      scheduleDeleteIndexedChunks(basePath, h.file_id, 'folder_path_hidden_or_deleted');
+      continue;
+    }
+
+    if (hitName && firestoreName && hitName !== firestoreName) {
+      console.log('[searchService][debug] DROP search hit: file name mismatch', {
+        basePath,
+        ...debugBase,
+        hitName,
+        firestoreName,
+      });
+      continue;
+    }
+    if (hitExt && firestoreExt && hitExt !== firestoreExt) {
+      console.log('[searchService][debug] DROP search hit: extension mismatch', {
+        basePath,
+        ...debugBase,
+        hitExt,
+        firestoreExt,
+      });
+      continue;
+    }
+    if (hitFolderId && firestoreFolderId && hitFolderId !== firestoreFolderId) {
+      console.log('[searchService][debug] DROP search hit: folder mismatch', {
+        basePath,
+        ...debugBase,
+        hitFolderId,
+        firestoreFolderId,
+      });
+      continue;
+    }
+
+    console.log('[searchService][debug] KEEP search hit: Firestore file matched workspace', {
+      basePath,
+      ...debugBase,
+      firestoreStoragePath: storagePath || null,
+      firestoreName,
+      firestoreFolderId,
+    });
+    kept.push(h);
+  }
+
+  console.log('[searchService][debug] Firestore validation complete', {
+    basePath,
+    before: hits.length,
+    after: kept.length,
+    dropped: hits.length - kept.length,
+  });
+
+  return kept;
 }
 
 async function semanticSearch(input) {
@@ -434,7 +796,10 @@ async function semanticSearch(input) {
   // Deduplicate folder IDs
   activeFolderIds = Array.from(new Set(activeFolderIds));
 
-  const filters = ['source_type:=cloudfile'];
+  const filters = [
+    'source_type:=cloudfile',
+    `base_path:=${escapeFilterValue(basePath)}`,
+  ];
   if (Array.isArray(file_ids) && file_ids.length > 0) {
     const ids = file_ids.map(escapeFilterValue).join(',');
     filters.push(`cloudfile_id:[${ids}]`);
@@ -482,14 +847,15 @@ async function semanticSearch(input) {
   const tEmbed = Date.now() - t0;
 
   const t1 = Date.now();
-  const overFetch = Math.min(safeLimit * 3, MAX_LIMIT * 3);
+  const overFetch = Math.min(safeLimit * 5, MAX_LIMIT * 5);
+  let legacyIndexFallbackUsed = false;
 
   // Construct search options for TypeSense hybrid or semantic query
   const searchPayload = {
     collection: collectionName,
     filter_by: filters.join(' && '),
     per_page: overFetch,
-    include_fields: 'cloudfile_id,file_name,file_extension,mime_type,folder_id,folder_path_ids,folder_path_display,chunk_index,chunk_total,page_number,page_span_json,text,metadata_json,schema_version,doc_parties,doc_type,doc_governing_law,doc_change_of_control,doc_metadata_text',
+    include_fields: 'base_path,cloudfile_id,file_name,file_extension,mime_type,folder_id,folder_path_ids,folder_path_display,chunk_index,chunk_total,page_number,page_span_json,text,metadata_json,schema_version,doc_parties,doc_type,doc_governing_law,doc_change_of_control,doc_metadata_text',
   };
 
   const isHybrid = hybrid && trimmedQuery && trimmedQuery !== '*';
@@ -507,9 +873,42 @@ async function semanticSearch(input) {
 
   let multiSearchResult;
   try {
+    console.log('[searchService][debug] Typesense search request', {
+      collectionName,
+      basePath,
+      query: trimmedQuery,
+      mode: isHybrid ? 'hybrid' : 'semantic',
+      filter_by: searchPayload.filter_by,
+      per_page: searchPayload.per_page,
+      note: 'strict base_path filter enabled; run POST /search/reindex for old indexes without base_path',
+      min_similarity: safeMinSim,
+      requestedLimit: limit,
+      safeLimit,
+    });
     multiSearchResult = await client.multiSearch.perform({
       searches: [searchPayload],
     });
+
+    const strictHits = (multiSearchResult.results && multiSearchResult.results[0] && multiSearchResult.results[0].hits) || [];
+    const hasStrictBasePathFilter = filters.some(f => f.startsWith('base_path:='));
+    if (hasStrictBasePathFilter && strictHits.length === 0) {
+      const legacyFilters = filters.filter(f => !f.startsWith('base_path:='));
+      const legacyPayload = {
+        ...searchPayload,
+        filter_by: legacyFilters.join(' && '),
+      };
+      console.warn('[searchService][debug] Strict base_path search returned 0 hits; retrying legacy index candidates', {
+        collectionName,
+        basePath,
+        strictFilter: searchPayload.filter_by,
+        legacyFilter: legacyPayload.filter_by,
+        query: trimmedQuery,
+      });
+      multiSearchResult = await client.multiSearch.perform({
+        searches: [legacyPayload],
+      });
+      legacyIndexFallbackUsed = true;
+    }
   } catch (e) {
     if (e.httpStatus === 404) {
       return {
@@ -524,6 +923,23 @@ async function semanticSearch(input) {
   const tSearch = Date.now() - t1;
 
   const rawHits = (multiSearchResult.results && multiSearchResult.results[0] && multiSearchResult.results[0].hits) || [];
+  console.log('[searchService][debug] Typesense raw hits', {
+    collectionName,
+    basePath,
+    legacyIndexFallbackUsed,
+    rawCount: rawHits.length,
+    firstHits: rawHits.slice(0, 5).map(h => {
+      const doc = h.document || {};
+      return {
+        file_id: doc.cloudfile_id || null,
+        base_path: doc.base_path || null,
+        file_name: doc.file_name || null,
+        folder_id: doc.folder_id || null,
+        vector_distance: h.vector_distance,
+        text_match: h.text_match,
+      };
+    }),
+  });
 
   let hits = rawHits
     .map(h => {
@@ -553,6 +969,7 @@ async function semanticSearch(input) {
 
       return {
         file_id: doc.cloudfile_id || null,
+        base_path: doc.base_path || null,
         file_name: doc.file_name || meta.file_name || null,
         file_extension: doc.file_extension || null,
         mime_type: doc.mime_type || null,
@@ -577,6 +994,7 @@ async function semanticSearch(input) {
       };
     })
     .filter(h => h.similarity >= safeMinSim)
+    .filter(h => !h.base_path || h.base_path === basePath)
     .filter(h => !requireLexicalGate || h._lexicalRelevance.isRelevant)
     .sort((a, b) => {
       const aRel = a._lexicalRelevance || {};
@@ -586,11 +1004,21 @@ async function semanticSearch(input) {
         return (bRel.matchedTokenCount || 0) - (aRel.matchedTokenCount || 0);
       }
       return b.similarity - a.similarity;
-    })
-    .slice(0, safeLimit)
-    .map(({ _lexicalRelevance, ...hit }) => hit);
+    });
+
+  console.log('[searchService][debug] Hits after relevance/basePath filters', {
+    basePath,
+    beforeFirestoreValidation: hits.length,
+    firstHits: hits.slice(0, 5).map(summarizeHitForDebug),
+  });
 
   hits = await filterExistingCloudFiles(hits, basePath);
+  if (legacyIndexFallbackUsed) {
+    scheduleAutoReindexForLegacyIndex(basePath);
+  }
+  hits = hits
+    .slice(0, safeLimit)
+    .map(({ _lexicalRelevance, ...hit }) => hit);
 
   if (highlight) {
     for (const h of hits) h.highlight = makeHighlight(h.text, trimmedQuery);
@@ -604,6 +1032,9 @@ async function semanticSearch(input) {
     timing_ms: { embed: tEmbed, search: tSearch, total: tEmbed + tSearch },
     hyde: hydeMeta,
   };
+  if (legacyIndexFallbackUsed) {
+    result.warning = 'Using legacy search index without base_path. Background reindex has been queued for this workspace.';
+  }
   if (group_by_file) result.groups = groupByFile(hits);
   return result;
 }

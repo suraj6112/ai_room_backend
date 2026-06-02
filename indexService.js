@@ -17,7 +17,7 @@ const crypto = require('crypto');
 const Typesense = require('typesense');
 const { chunkPages } = require('./chunker');
 
-const SCHEMA_VERSION = 3;
+const SCHEMA_VERSION = 4;
 const TYPESENSE_COLLECTION_PREFIX = 'pdf2md_';
 
 const TYPESENSE_DOC_API_KEY = process.env.TYPESENSE_DOC_API_KEY;
@@ -198,6 +198,7 @@ async function buildFolderPathIds(folderId, basePath) {
 
 const CLOUDFILES_REQUIRED_FIELDS = [
   { name: 'source_type',          type: 'string',   optional: true, facet: true },
+  { name: 'base_path',            type: 'string',   optional: true, facet: true },
   { name: 'cloudfile_id',         type: 'string',   optional: true, facet: true },
   { name: 'folder_id',            type: 'string',   optional: true, facet: true },
   { name: 'folder_path_ids',      type: 'string[]', optional: true, facet: true },
@@ -287,6 +288,36 @@ async function indexCloudFile(fileId, basePath, fileData) {
   const db = admin.firestore();
   const fileDoc = await db.doc(`${basePath}/files/${fileId}`).get();
   const latestFileData = fileDoc.exists ? fileDoc.data() : fileData;
+  const collectionName = getCollectionName(basePath);
+
+  async function deleteExistingChunks(reason) {
+    try {
+      const deleteResult = await client.collections(collectionName).documents().delete({
+        filter_by: `cloudfile_id:=${fileId}`
+      });
+      console.log(`[CloudFiles RAG] Removed chunks for ${fileId} (${reason}, deleted: ${deleteResult.num_deleted || 0})`);
+    } catch (e) {
+      if (e.httpStatus !== 404) {
+        console.warn(`[CloudFiles RAG] Non-fatal: Could not remove chunks for ${fileId}:`, e.message);
+      }
+    }
+  }
+
+  const storagePath = latestFileData && latestFileData.storagePath;
+  if (!storagePath) {
+    await deleteExistingChunks('missing_storage_path');
+    return { chunksIndexed: 0, skipped: 'missing_storage_path' };
+  }
+
+  try {
+    const [storageExists] = await admin.storage().bucket().file(storagePath).exists();
+    if (!storageExists) {
+      await deleteExistingChunks('storage_object_missing');
+      return { chunksIndexed: 0, skipped: 'storage_object_missing' };
+    }
+  } catch (e) {
+    console.warn(`[CloudFiles RAG] Could not verify storage object for ${fileId}, continuing:`, e.message);
+  }
 
   const pages = await loadPagesForFile(fileId, basePath, latestFileData);
   if (!pages || Object.keys(pages).length === 0) {
@@ -372,6 +403,7 @@ async function indexCloudFile(fileId, basePath, fileData) {
     id: `cf_${safeBasePath}_${fileId}_${i}`,
     user_uid: latestFileData.createdBy || basePath.split('/')[1],
     source_type: 'cloudfile',
+    base_path: basePath,
     cloudfile_id: fileId,
     schema_version: SCHEMA_VERSION,
     embedding: embeddings[i],
@@ -403,8 +435,6 @@ async function indexCloudFile(fileId, basePath, fileData) {
     doc_change_of_control: docChangeOfControl,
     doc_metadata_text: docMetadataText,
   }));
-
-  const collectionName = getCollectionName(basePath);
 
   // Apply deduplication fix: Delete existing stale chunks for this cloudfile_id before importing new ones
   try {
